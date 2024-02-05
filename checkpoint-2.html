@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint-2</title>
+</head>
+<body>
+
+<h1>Rick & Morty</h1>
+<label for="">Character Name</label>
+<input id="input" type="text" placeholder="Buscar">
+<div id="container"></div>
+
+
+
+    <script>
+        const input = document.getElementById("input")
+        // const nombre = input.value;
+        const container = document.getElementById("container")
+
+        input.addEventListener("input", (event)=>{
+            const nombre = event.target.value;
+            if(nombre.length > 0){
+            renderPersonaje(nombre)
+            } else {
+                container.innerHTML = ``;
+            }
+        })
+
+        async function renderPersonaje (name){
+            try{
+                const response = await fetch(`https://rickandmortyapi.com/api/character/?name=${name}`)
+                const data = await response.json();
+                console.log(data);
+
+                data.results.forEach(element => {
+                    const name = element.name;
+                    const image = element.image;
+
+                    const card = document.createElement('div')
+                    card.className = "card"
+                    card.innerHTML = `
+                    <p>Nombre: ${name}</p>
+                    <img src="${image}" alt="${name}">
+                    `
+                    container.appendChild(card)
+                    
+                });
+
+            }
+            catch(err){
+                console.error(err);
+            }
+        }
+
+    </script>
+</body>
+</html>
